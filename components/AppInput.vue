@@ -1,6 +1,7 @@
 <template>
   <div class="input">
-    <input class="input__field" :type="type" placeholder=" " :maxlength="maxLength" @change="updateInputValue" v-model="inputValue">
+    <input class="input__field" :type="type" placeholder=" " :maxlength="maxLength" @change="updateInputValue"
+      v-model="inputValue">
     <span class="input__placeholder">{{ props.label }}</span>
   </div>
 </template>
@@ -41,15 +42,17 @@ const props = defineProps({
 const emit = defineEmits(['getInputValue'])
 
 function updateInputValue() {
-  let newValue = +inputValue.value;
+  if (props.maxLength && props.maxValue && props.minValue) {
+    let newValue = +inputValue.value;
 
-  if (props.minValue && newValue < props.minValue) {
-    newValue = props.minValue;
-  } else if (props.maxValue && newValue > props.maxValue) {
-    newValue = props.maxValue;
+    if (props.minValue && newValue < props.minValue) {
+      newValue = props.minValue;
+    } else if (props.maxValue && newValue > props.maxValue) {
+      newValue = props.maxValue;
+    }
+    inputValue.value = newValue.toString();
   }
 
-  inputValue.value = newValue.toString();
   emit('getInputValue', inputValue, props.identifier);
 }
 </script>
